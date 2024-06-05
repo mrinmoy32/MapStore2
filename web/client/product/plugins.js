@@ -16,12 +16,14 @@ import Identify from '../plugins/Identify';
 import Login from '../plugins/Login';
 import Maps from "../plugins/Maps";
 import Print from "../plugins/Print";
+import Center from "../plugins/Center";
 import RulesDataGrid from "../plugins/RulesDataGrid";
 import RulesEditor from "../plugins/RulesEditor";
 import RulesManagerFooter from "../plugins/RulesManagerFooter";
 import UserSession from "../plugins/UserSession";
 import FeatureEditor from '../plugins/FeatureEditor';
 import MetadataInfo from '../plugins/MetadataInfo';
+import Example from '../plugins/Example'
 
 import {toModulePlugin} from "../utils/ModulePluginsUtils";
 
@@ -41,6 +43,7 @@ export const plugins = {
     LoginPlugin: Login,
     MapsPlugin: Maps,
     PrintPlugin: Print,
+    CenterPlugin: Center,
     RulesDataGridPlugin: RulesDataGrid,
     RulesEditorPlugin: RulesEditor,
     RulesManagerFooter: RulesManagerFooter,
@@ -160,6 +163,7 @@ export const plugins = {
     ZoomAllPlugin: toModulePlugin('ZoomAll', () => import(/* webpackChunkName: 'plugins/zoomAll' */ '../plugins/ZoomAll')),
     ZoomInPlugin: toModulePlugin('ZoomIn', () => import(/* webpackChunkName: 'plugins/zoomIn' */ '../plugins/ZoomIn')),
     ZoomOutPlugin: toModulePlugin('ZoomOut', () => import(/* webpackChunkName: 'plugins/zoomOut' */ '../plugins/ZoomOut')),
+    ExamplePlugin: toModulePlugin('Example', () => import(/* webpackChunkName: 'plugins/example' */ '../plugins/Example')),
     AddWidgetDashboardPlugin: toModulePlugin('AddWidgetDashboard', () => import(/* webpackChunkName: 'plugins/AddWidgetDashboard' */ '../plugins/AddWidgetDashboard')),
     MapConnectionDashboardPlugin: toModulePlugin('MapConnectionDashboard', () => import(/* webpackChunkName: 'plugins/MapConnectionDashboard' */ '../plugins/MapConnectionDashboard'))
 };
