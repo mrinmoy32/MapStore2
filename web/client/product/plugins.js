@@ -23,7 +23,6 @@ import RulesManagerFooter from "../plugins/RulesManagerFooter";
 import UserSession from "../plugins/UserSession";
 import FeatureEditor from '../plugins/FeatureEditor';
 import MetadataInfo from '../plugins/MetadataInfo';
-import Example from '../plugins/Example'
 
 import {toModulePlugin} from "../utils/ModulePluginsUtils";
 
@@ -163,7 +162,6 @@ export const plugins = {
     ZoomAllPlugin: toModulePlugin('ZoomAll', () => import(/* webpackChunkName: 'plugins/zoomAll' */ '../plugins/ZoomAll')),
     ZoomInPlugin: toModulePlugin('ZoomIn', () => import(/* webpackChunkName: 'plugins/zoomIn' */ '../plugins/ZoomIn')),
     ZoomOutPlugin: toModulePlugin('ZoomOut', () => import(/* webpackChunkName: 'plugins/zoomOut' */ '../plugins/ZoomOut')),
-    ExamplePlugin: toModulePlugin('Example', () => import(/* webpackChunkName: 'plugins/example' */ '../plugins/Example')),
     AddWidgetDashboardPlugin: toModulePlugin('AddWidgetDashboard', () => import(/* webpackChunkName: 'plugins/AddWidgetDashboard' */ '../plugins/AddWidgetDashboard')),
     MapConnectionDashboardPlugin: toModulePlugin('MapConnectionDashboard', () => import(/* webpackChunkName: 'plugins/MapConnectionDashboard' */ '../plugins/MapConnectionDashboard'))
 };
