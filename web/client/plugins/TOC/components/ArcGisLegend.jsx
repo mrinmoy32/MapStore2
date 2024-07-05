@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { isEmpty, isNumber } from 'lodash';
 import ArcGisLegendIcon from './ArcGisLegendIcon';
 /**
- * WMSLegend renders the wms legend image
+ * ArcGisLegend renders the arcgis legend image
  * @prop {object} node layer node options
  * @prop {object} legendContainerStyle style of legend container
  * @prop {object} legendStyle style of legend image

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Message from '../../../components/I18N/Message';
+import PropTypes from "prop-types";
+import React from "react";
+import Message from "../../../components/I18N/Message";
 
 /**
  * Legend renders the wms legend image
@@ -24,27 +24,30 @@ class ArcGisLegendIcon extends React.Component {
         currentZoomLvl: PropTypes.number,
         scales: PropTypes.array,
         scaleDependent: PropTypes.bool,
-        language: PropTypes.string
+        language: PropTypes.string,
     };
 
     static defaultProps = {
         legendHeight: 12,
         legendWidth: 12,
         legendOptions: "forceLabels:on",
-        style: {maxWidth: "100%"},
-        scaleDependent: true
+        style: { maxWidth: "100%" },
+        scaleDependent: true,
     };
     state = {
         error: false,
-        imageData: ''
-    }
+        legends: [],
+    };
     UNSAFE_componentWillReceiveProps(nProps) {
-        if ( this.state.error && this.getUrl(nProps, 0) !== this.getUrl(this.props, 0)) {
-            this.setState(() => ({error: false}));
+        if (
+            this.state.error &&
+            this.getUrl(nProps, 0) !== this.getUrl(this.props, 0)
+        ) {
+            this.setState(() => ({ error: false }));
         }
     }
-   async componentDidMount() {
-        if (this.props.layer.type === 'arcgis') {
+    async componentDidMount() {
+        if (this.props.layer.type === "arcgis") {
             await this.fetchArcgisLegend();
         }
     }
@@ -54,51 +57,73 @@ class ArcGisLegendIcon extends React.Component {
         try {
             const response = await fetch(`${layer.url}/legend?f=pjson`);
             if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.statusText}`);
+                throw new Error(
+                    `Network response was not ok: ${response.statusText}`
+                );
             }
             const responseData = await response.json();
-            const imageData = responseData.layers[layer.name].legend[0].imageData;
-            this.setState({ imageData });
-            console.log("updated state", this.state)
+            const legends = responseData.layers[layer.name].legend;
+            this.setState({ legends });
+            console.log("updated state", this.state);
         } catch (error) {
-            console.error('Error fetching legend data:', error);
+            console.error("Error fetching legend data:", error);
             this.setState({ error: true });
         }
     }
     onImgError = () => {
-        this.setState({error: true}, () => {
-            console.log("Image Load err")
+        this.setState({ error: true }, () => {
+            console.log("Image Load err");
         });
-    }
+    };
     getScale = (props) => {
-        if (props.scales && props.currentZoomLvl !== undefined && props.scaleDependent) {
+        if (
+            props.scales &&
+            props.currentZoomLvl !== undefined &&
+            props.scaleDependent
+        ) {
             const zoom = Math.round(props.currentZoomLvl);
-            const scale = props.scales[zoom] ?? props.scales[props.scales.length - 1];
+            const scale =
+                props.scales[zoom] ?? props.scales[props.scales.length - 1];
             return Math.round(scale);
         }
         return null;
     };
     getUrl = (props) => {
-       if (props.layer && props.layer.type === "arcgis" && props.layer.url)
-        {
-        return `data:image/png;base64,${this.state.imageData}`
+        if (props.layer && props.layer.type === "arcgis" && props.layer.url) {
+            return `data:image/png;base64,${this.state.legends}`;
         }
-        return '';
-    }
+        return "";
+    };
     render() {
-        if (!this.state.error && this.props.layer && (this.props.layer.type === "arcgis" && this.state.imageData) && this.props.layer.url) {
-            return <img onError={this.onImgError} onLoad={(e) => this.validateImg(e.target)} src={this.getUrl(this.props)} style={this.props.style}/>;
+        if (
+            !this.state.error &&
+            this.props.layer &&
+            this.props.layer.type === "arcgis" &&
+            this.state.legends &&
+            this.props.layer.url
+        ) {
+            return this.state.legends.map((legend, index) => (
+                <li key={index}>
+                    <img className="arcgis_legend_image"
+                        onError={this.onImgError}
+                        onLoad={(e) => this.validateImg(e.target)}
+                        src={`data:image/png;base64,${legend.imageData}`}
+                        style={this.props.stysle}
+                    />
+                    <span>{legend.label}</span>
+                </li>
+            ));
         }
         return <Message msgId="layerProperties.legenderror" />;
     }
     validateImg = (img) => {
         // GeoServer response is a 1x2 px size when legend is not available.
         // In this case we need to show the "Legend Not available" message
-        console.log(`Image Dimension: ${img.width}x${img.height}`)
+        console.log(`Image Dimension: ${img.width}x${img.height}`);
         if (img.height <= 1 && img.width <= 2) {
             this.onImgError();
         }
-    }
+    };
 }
 
 export default ArcGisLegendIcon;
